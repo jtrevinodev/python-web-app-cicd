@@ -66,6 +66,7 @@ pipeline {
                     } finally {
                         // Removing the docker image
                         //sh "docker rmi $registry:$BUILD_NUMBER"
+                        sh 'echo "finally" '
                     }
 
                 
