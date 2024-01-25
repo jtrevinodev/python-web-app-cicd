@@ -45,6 +45,7 @@ pipeline {
     stage('Test code inside docker container'){
         steps {
             script{
+                app.run()
                 app.inside() {
                     sh "python -m unittest --verbose --failfast"
                 }
