@@ -14,15 +14,10 @@ pipeline {
 
     stage('Clone repository') {
 
-      /*steps {
-        git branch: 'master', credentialsId: 'github-key', url: 'git@github.com:jtrevinodev/guestbook-devops.git'
-
-      }*/
-
       steps { 
         script{
           checkout scm
-          //git credentialsId: 'github-key', url: 'git@github.com:jtrevinodev/guestbook-devops.git'
+          
         }
       }
 
@@ -49,7 +44,6 @@ pipeline {
                 
                 try {
                         app.inside() {
-
                             
                             echo "Runing unit test....."
                             sh "py.test --junitxml results.xml"
@@ -61,9 +55,7 @@ pipeline {
 
                     } finally {
                         // Removing the docker image
-                        //sh "docker rmi ${registry}:${image_tag}"
-                        sh 'echo "finally" '
-                        sh "ls"
+                        sh "docker rmi ${registry}:${image_tag}"
                     }
 
                 
@@ -71,7 +63,7 @@ pipeline {
         }
     }
 
-    stage('Push container image to registry'){
+    stage('Push tested container image to registry'){
       
       steps{
 
@@ -81,59 +73,12 @@ pipeline {
 
           }
         }
-
-        
-        
       }
        
     }
-    
-
-    /*stage('Deploy to Kubernetes') {
-      steps{
-        script{
-          sh('echo "Deploying to production environment"')
-          
-          sh 'echo "Clonning deployment repository"'
-
-          //docker.image('argoproj/argo-cd-ci-builder:v1.0.0').inside {
-          dir("deploy") {
-            git credentialsId: 'github-key', url: 'git@github.com:jtrevinodev/guestbook-devops-deploy.git'
-
-            def frontend_df = "base/resources/frontend-deployment.yaml"
-            def frontend_deployment = readFile frontend_df
-            frontend_deployment = frontend_deployment.replaceAll("image:.*", "image: jtrevinodev/guestbook:${image_tag}")
-            writeFile file: frontend_df, text: frontend_deployment
-            sh("cat ${frontend_df}")
-
-            sh 'echo "Pushing deployment config to deployment repository"'
-            
-            //withCredentials([GitUsernamePassword(credentialsId: 'github-accesstoken', gitToolName: 'Default')]){
-            //withCredentials([sshUserPrivateKey(credentialsId: "github-key", keyFileVariable: 'key')]) {
-            withCredentials([string(credentialsId: 'github-jenkins-ak', variable: 'TOKEN')]) {
-            // For SSH private key authentication, try the sshagent step from the SSH Agent plugin.
-            //  sshagent (credentials: ['github-key']) {
-              sh 'git config --global user.email "jtrevino.dev@gmail.com"'
-              sh 'git config --global user.name "Jenkins pipeline"'
-              //sh 'git checkout master'
-              sh "git add ${frontend_df}"
-              sh 'git commit -m "image tag updated: ${image_tag}"'
-              
-              sh 'git remote set-url origin https://$TOKEN@github.com/jtrevinodev/guestbook-devops-deploy.git'
-
-              sh 'git push origin master'
-            }
-
-          }
-        }
-        
-      }
-      
-      
-
-    }*/
 
   }
+
   post{
     always {
         junit 'results.xml'
