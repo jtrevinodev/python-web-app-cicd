@@ -47,7 +47,7 @@ pipeline {
         steps {
             script{
                 try {
-                        app.inside() {
+                        app.run("-it -v reports:/reports").inside() {
 
                             /*
                             // Extracting the PROJECTDIR environment variable from inside the container
