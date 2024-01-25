@@ -63,6 +63,7 @@ pipeline {
                         // Removing the docker image
                         //sh "docker rmi ${registry}:${image_tag}"
                         sh 'echo "finally" '
+                        sh "ls"
                     }
 
                 
