@@ -60,14 +60,18 @@ pipeline {
                             dir("$WORKSPACE$PROJECTDIR") {
                                 sh "npm test"
                             }*/
-                            
-                            sh "python -m unittest --verbose --failfast"
+                            echo "Runing unit test....."
+                            sh "py.test --junitxml results.xml"
+
+                            echo "Runing code coverage test....."
+                            sh "coverage run -m pytest"
+                            sh "coverage html"
                         }
 
                     } finally {
                         // Removing the docker image
-                        sh "docker rmi ${registry}:${image_tag}"
-                        //sh 'echo "finally" '
+                        //sh "docker rmi ${registry}:${image_tag}"
+                        sh 'echo "finally" '
                     }
 
                 

@@ -15,6 +15,7 @@ RUN pip install --upgrade pip && \
         flake8 \
         pylint \
         pytest \
+        coverage \
         pytest-flask
 
 # expose the default flask port
