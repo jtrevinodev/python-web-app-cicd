@@ -45,17 +45,17 @@ pipeline {
     stage('Test code inside docker container'){
         steps {
             script{
-                //app.run()
-                app.withRun('-d=true -p 8888:8080') {c ->
+                def appContainer = app.run()
+                /*app.withRun('-d=true -p 8888:8080') {c ->
                     c.inside{
-                        /*  Do something here inside container  */
+                        
                         sh "ls"
                         sh "python -m unittest --verbose --failfast"
                     }
-                }
-                /*app.inside() {
-                    sh "python -m unittest --verbose --failfast"
                 }*/
+                appContainer.inside() {
+                    sh "python -m unittest --verbose --failfast"
+                }
             }
         }
     }
