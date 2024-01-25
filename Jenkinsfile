@@ -45,17 +45,30 @@ pipeline {
     stage('Test code inside docker container'){
         steps {
             script{
-                def appContainer = app.run()
-                /*app.withRun('-d=true -p 8888:8080') {c ->
-                    c.inside{
-                        
-                        sh "ls"
-                        sh "python -m unittest --verbose --failfast"
+                try {
+                        app.inside() {
+
+                            /*
+                            // Extracting the PROJECTDIR environment variable from inside the container
+                            def PROJECTDIR = sh(script: 'echo \$PROJECTDIR', returnStdout: true).trim()
+
+                            // Copying the project into our workspace
+                            sh "cp -r '$PROJECTDIR' '$WORKSPACE'"
+
+                            // Running the tests inside the new directory
+                            dir("$WORKSPACE$PROJECTDIR") {
+                                sh "npm test"
+                            }*/
+                            
+                            sh "python -m unittest --verbose --failfast"
+                        }
+
+                    } finally {
+                        // Removing the docker image
+                        sh "docker rmi $registry:$BUILD_NUMBER"
                     }
-                }*/
-                appContainer.inside() {
-                    sh "python -m unittest --verbose --failfast"
-                }
+
+                
             }
         }
     }
