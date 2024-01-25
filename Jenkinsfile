@@ -6,7 +6,8 @@ pipeline {
     registryCredential = 'docker-hub-credential'
     app = ''
 
-    image_tag = "${env.BRANCH_NAME}-${env.GIT_COMMIT}-${env.BUILD_NUMBER}"
+    //image_tag = "${env.BRANCH_NAME}-${env.GIT_COMMIT}-${env.BUILD_NUMBER}"
+    image_tag = "${env.GIT_COMMIT}-${env.BUILD_NUMBER}"
   }
 
   stages {
@@ -65,7 +66,7 @@ pipeline {
 
                     } finally {
                         // Removing the docker image
-                        sh "docker rmi ${image_tag}"
+                        sh "docker rmi ${registry}:${image_tag}"
                         //sh 'echo "finally" '
                     }
 
