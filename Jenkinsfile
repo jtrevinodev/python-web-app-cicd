@@ -135,6 +135,9 @@ pipeline {
 
   }
   post{
+    always {
+        junit 'results.xml'
+    }
     success {
       mail to:"jtrevino.dev@gmail.com", subject:"SUCCESS: ${currentBuild.fullDisplayName}", body: "Build succeded."
     }
