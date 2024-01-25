@@ -36,7 +36,7 @@ pipeline {
 
         script{
           echo "Building docker container"
-          app = docker.build("${registry}", ".")
+          app = docker.build("${registry}:${image_tag}", ".")
         }
 
       }
@@ -46,20 +46,11 @@ pipeline {
     stage('Test code inside docker container'){
         steps {
             script{
+                
                 try {
-                        app.run("-it -v reports:/reports").inside() {
+                        app.inside() {
 
-                            /*
-                            // Extracting the PROJECTDIR environment variable from inside the container
-                            def PROJECTDIR = sh(script: 'echo \$PROJECTDIR', returnStdout: true).trim()
-
-                            // Copying the project into our workspace
-                            sh "cp -r '$PROJECTDIR' '$WORKSPACE'"
-
-                            // Running the tests inside the new directory
-                            dir("$WORKSPACE$PROJECTDIR") {
-                                sh "npm test"
-                            }*/
+                            
                             echo "Runing unit test....."
                             sh "py.test --junitxml results.xml"
 

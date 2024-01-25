@@ -23,6 +23,6 @@ EXPOSE 8080
 
 # execute the Flask app
 #ENTRYPOINT ["python"]
-ENTRYPOINT ["python"]
+ENTRYPOINT ["/bin/bash"]
 HEALTHCHECK CMD curl --fail http://localhost:8080/ || exit 1
-CMD ["/app/app.py"]
+CMD ["python /app/app.py"]
