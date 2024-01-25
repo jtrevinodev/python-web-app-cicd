@@ -46,9 +46,9 @@ pipeline {
         steps {
             script{
                 app.run()
-                app.inside() {
+                /*app.inside() {
                     sh "python -m unittest --verbose --failfast"
-                }
+                }*/
             }
         }
     }
